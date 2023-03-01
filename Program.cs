@@ -85,16 +85,18 @@ priceunitTextbox.SendKeys("10");
 
 IWebElement savebutton = driver.FindElement(By.XPath("//*[@id=\"SaveButton\"]"));
 savebutton.Click();
+Thread.Sleep(2000);
 
 //click on the gotolastpage button//
 
 IWebElement gotolastpagebutton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
 gotolastpagebutton.Click();
-Thread.Sleep(3000);   
+Thread.Sleep(2000);
 
-IWebElement newcode = driver.FindElement(By.Id("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[7]/td[1]"));
 
-if (newcode.Text == "February2023!")
+IWebElement newcode = driver.FindElement(By.Id("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+
+if (newcode.Text == "February2023")
 {
     Console.WriteLine("New Time record created successfully!");
 }
