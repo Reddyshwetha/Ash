@@ -1,24 +1,33 @@
-﻿using System;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
+using SPR.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 
 namespace SPR.Pages
 {
-	public class HomePage
-	{
-		public void GoToTMPage(IWebDriver driver)
-		{
 
-            // create a new time record //
+    public class HomePage
+    {
 
-            IWebElement admistrationDropdown = driver.FindElement(By.XPath("/html/body/div[3]/div/div/ul/li[5]/a"));
-            admistrationDropdown.Click();
+        public void GoToTMPage(IWebDriver driver)
+        {
 
-            //Navigate to the time and material //
+            //Navigate to Time and Material page 
+            Wait.WaitToBeClicakble(driver, "XPath", "/html/body/div[3]/div/div/ul/li[5]/a", 5);
+            IWebElement administrationDropdown = driver.FindElement(By.XPath("/html/body/div[3]/div/div/ul/li[5]/a"));
+            administrationDropdown.Click();
 
-            IWebElement tmOption = driver.FindElement(By.XPath("/html/body/div[3]/div/div/ul/li[5]/ul/li[3]/a"));
+
+            Wait.WaitToBeClicakble(driver, "XPath", "/html/body/div[3]/div/div/ul[1]/li[5]/ul/li[3]/a", 5);
+            IWebElement tmOption = driver.FindElement(By.XPath("/html/body/div[3]/div/div/ul[1]/li[5]/ul/li[3]/a"));
             tmOption.Click();
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
+
+
+
         }
-	}
+    }
 }
 
