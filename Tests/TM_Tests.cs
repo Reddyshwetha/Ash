@@ -26,7 +26,7 @@ namespace SPR.Tests
             homePageObj.GoToTMPage(driver);
         }
 
-        [Test]
+        [Test,Order(1)]
 
         public void CreateTMTest()
         {
@@ -35,7 +35,7 @@ namespace SPR.Tests
             tmpageObj.CreateTM(driver);
 
         }
-        [Test]
+        [Test,Order(2)]
 
         public void EditTMTest()
         {
@@ -49,7 +49,7 @@ namespace SPR.Tests
         }
 
        
-        [Test]
+        [Test,Order(3)]
 
         public void DeleteTMTest()
         {

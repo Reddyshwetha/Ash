@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection.Emit;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using SPR.Utilities;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SPR.Pages
 {
@@ -80,9 +84,26 @@ namespace SPR.Pages
 
         public void EditTM(IWebDriver driver)
         {
+
+            //click on Edit Button make changes to typecode
+            Thread.Sleep(1000);
+            IWebElement goToLastpageButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]"));
+            goToLastpageButton.Click();
+
+            IWebElement recordToBeEdited = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/div[2]/table/tbody/tr[2]/td[1]"));
+            if (recordToBeEdited.Text == "February2023")
+            {
+                IWebElement LastRecordEdit = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
+                LastRecordEdit.Click();
+            }
+            else
+            {
+                Assert.Fail("Record to be edited not found");
+            }
+
             // Navigate to the last one record and click on edit
-            IWebElement lasttimerecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
-            lasttimerecord.Click();
+            IWebElement LastTimeRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            LastTimeRecord.Click();
 
             IWebElement Editbutton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
             Editbutton.Click();
@@ -99,7 +120,7 @@ namespace SPR.Pages
             // Edit new description into the description textbox
             IWebElement Editnewdescription = driver.FindElement(By.Id("Description"));
             Editnewdescription.Clear();
-            Editnewdescription.SendKeys("February2023 Description");
+            Editnewdescription.SendKeys("Feb23");
 
             // Edit new price per unit into the price per unit text box
             IWebElement EditPriceperunittextbox = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[4]/div/span[1]/span/input[1]"));
@@ -122,45 +143,76 @@ namespace SPR.Pages
 
             IWebElement Newcode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
 
-            if (Newcode.Text == ("February2023" ))
-            {
-                Console.WriteLine("Edited time record created sucessfully");
-            }
-            else
-            {
-                Console.WriteLine("Time record not created sucessfully");
-            }
+            Assert.That(Newcode.Text != "18", "Record hasn't been edited");
+
+
+            //if (Newcode.Text == ("February2023" ))
+            //{
+             //   Console.WriteLine("Edited time record created sucessfully");
+            //}
+            //else
+            //{
+              //  Console.WriteLine("Time record not created sucessfully");
+            //}
 
         }
 
 
         public void DeleteTM(IWebDriver driver)
         {
+
             //Navigate to last page and click on delete button
-             IWebElement Lasttimerecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
-            Lasttimerecord.Click();
 
-            IWebElement deletebutton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
-            deletebutton.Click();
-            Thread.Sleep(1000);
+            //IWebElement Lasttimerecord = driver.FindElement(Driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
 
-            // Navigate to alert option 
-            driver.SwitchTo().Alert().Accept();
+            //Lasttimerecord.Click();
+
+            IWebElement gotothelastpagebutton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[last()]/a[4]/span"));
+            gotothelastpagebutton.Click();
+            Thread.Sleep(5000);
+
+            IWebElement LastrecordToBeDeleted = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+           
+            //lasttimerecord
+            //IWebElement deletebutton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
+            //deletebutton.Click();
+            //Thread.Sleep(1000);
+
+            if (LastrecordToBeDeleted.Text == "18")
+            {
+                //Find and click on delete button for last reocrd
+                IWebElement deleteButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
+                deleteButton.Click();
+                Thread.Sleep(1000);
+
+            }
+            else
+            {
+
+                Assert.Fail("Record to be deleted not found");
+
+            }
+
+                // Navigate to alert option 
+                driver.SwitchTo().Alert().Accept();
             Thread.Sleep(5000);
 
             // check if the record is properly deleted
             IWebElement codedeleted = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
-            //Console.WriteLine(codedeleted.Text);
 
-            if (codedeleted.Text == "February2023")
-            {
-                Console.WriteLine("Time record not deleted sucessfully");
-            }
-            else
-            {
-                Console.WriteLine("Time record deleted sucessfully");
-            }
-            driver.Quit();
+            //Console.WriteLine(codedeleted.Text);
+            Assert.That(codedeleted.Text != "18", "Record hasn't been deleted ");
+
+
+            //if (codedeleted.Text == "February2023")
+            //{
+             //   Console.WriteLine("Time record not deleted sucessfully");
+            //}
+           // else
+            //{
+             //   Console.WriteLine("Time record deleted sucessfully");
+           // }
+            //driver.Quit();
 
            
 
